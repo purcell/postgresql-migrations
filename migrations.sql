@@ -1,3 +1,6 @@
+-- Add your migrations at the end of the file, and run "psql -1f migrations.sql yourdbname"
+-- to apply all pending migrations.
+
 --------------------------------------------------------------------------------
 -- A function that will apply an individual migration
 --------------------------------------------------------------------------------
@@ -20,16 +23,23 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
+--------------------------------------------------------------------------------
 -- Example migrations follow
+--------------------------------------------------------------------------------
 
+-- Give each migration a unique name:
 SELECT apply_migration('create_things_table', $$
-    CREATE TABLE things (
-      name TEXT
-      );
+  -- SQL to apply goes here                       
+  CREATE TABLE things (
+    name TEXT
+  );
 $$);
 
-
+-- Add more migrations in they order you'd like them to be applied:
 SELECT apply_migration('alter_things_table', $$
-    ALTER TABLE things ADD number INTEGER;
+  -- You can place not just one statement
+  ALTER TABLE things ADD number INTEGER;
+  -- but multiple in here.
+  ALTER TABLE things ALTER name SET NOT NULL;
+  -- All will be run in a transaction.
 $$);
