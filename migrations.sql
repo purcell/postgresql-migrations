@@ -35,7 +35,7 @@ SELECT apply_migration('create_things_table', $$
   );
 $$);
 
--- Add more migrations in they order you'd like them to be applied:
+-- Add more migrations in the order you'd like them to be applied:
 SELECT apply_migration('alter_things_table', $$
   -- You can place not just one statement
   ALTER TABLE things ADD number INTEGER;
