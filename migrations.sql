@@ -1,5 +1,14 @@
--- Add your migrations at the end of the file, and run "psql -1f migrations.sql yourdbname"
--- to apply all pending migrations.
+-- This file provides a method for applying incremental schema changes
+-- to a PostgreSQL database.
+
+-- Add your migrations at the end of the file, and run "psql -1f
+-- migrations.sql yourdbname" to apply all pending migrations.
+
+-- Most Rails (ie. ActiveRecord) migrations are run by a user with
+-- full read-write access to both the schema and its contents, which
+-- isn't ideal. You'd generally run this file as a database owner, and
+-- the contained migrations would grant access to less-privileged
+-- application-level users as appropriate.
 
 --------------------------------------------------------------------------------
 -- A function that will apply an individual migration
@@ -29,7 +38,7 @@ $$ LANGUAGE plpgsql;
 
 -- Give each migration a unique name:
 SELECT apply_migration('create_things_table', $$
-  -- SQL to apply goes here                       
+  -- SQL to apply goes here
   CREATE TABLE things (
     name TEXT
   );
