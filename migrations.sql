@@ -3,7 +3,7 @@
 
 -- Add your migrations at the end of the file, and run "psql -1f
 -- migrations.sql yourdbname" to apply all pending migrations. The
--- "-1" causes all the changes to be applied atomically.
+-- "-1" causes all the changes to be applied atomically
 
 -- Most Rails (ie. ActiveRecord) migrations are run by a user with
 -- full read-write access to both the schema and its contents, which
@@ -17,16 +17,16 @@
 CREATE OR REPLACE FUNCTION apply_migration (migration_name TEXT, ddl TEXT) RETURNS BOOLEAN
   AS $$
 BEGIN
-  CREATE TABLE IF NOT EXISTS schema_migrations (
+  CREATE TABLE IF NOT EXISTS applied_migrations (
       identifier TEXT NOT NULL PRIMARY KEY
     , ddl TEXT NOT NULL
     , applied_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
   );
-  LOCK TABLE schema_migrations IN EXCLUSIVE MODE;
-  IF NOT EXISTS (SELECT 1 FROM schema_migrations sm WHERE sm.identifier = migration_name)
+  LOCK TABLE applied_migrations IN EXCLUSIVE MODE;
+  IF NOT EXISTS (SELECT 1 FROM applied_migrations m WHERE m.identifier = migration_name)
   THEN
     EXECUTE ddl;
-    INSERT INTO schema_migrations (identifier, ddl) VALUES (migration_name, ddl);
+    INSERT INTO applied_migrations (identifier, ddl) VALUES (migration_name, ddl);
     RETURN TRUE;
   END IF;
   RETURN FALSE;
