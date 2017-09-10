@@ -1,7 +1,7 @@
 -- This file provides a method for applying incremental schema changes
 -- to a PostgreSQL database.
 
--- Add your migrations at the end of the file, and run "psql -1f
+-- Add your migrations at the end of the file, and run "psql -v ON_ERROR_STOP=1 -1f
 -- migrations.sql yourdbname" to apply all pending migrations. The
 -- "-1" causes all the changes to be applied atomically
 
