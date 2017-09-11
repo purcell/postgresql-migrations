@@ -14,24 +14,31 @@
 --------------------------------------------------------------------------------
 -- A function that will apply an individual migration
 --------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION apply_migration (migration_name TEXT, ddl TEXT) RETURNS BOOLEAN
-  AS $$
+DO
+$body$
 BEGIN
-  CREATE TABLE IF NOT EXISTS applied_migrations (
-      identifier TEXT NOT NULL PRIMARY KEY
-    , ddl TEXT NOT NULL
-    , applied_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
-  );
-  LOCK TABLE applied_migrations IN EXCLUSIVE MODE;
-  IF NOT EXISTS (SELECT 1 FROM applied_migrations m WHERE m.identifier = migration_name)
-  THEN
-    EXECUTE ddl;
-    INSERT INTO applied_migrations (identifier, ddl) VALUES (migration_name, ddl);
-    RETURN TRUE;
+  IF NOT EXISTS (SELECT FROM pg_catalog.pg_proc WHERE proname = 'apply_migration') THEN
+    CREATE FUNCTION apply_migration (migration_name TEXT, ddl TEXT) RETURNS BOOLEAN
+      AS $$
+    BEGIN
+      CREATE TABLE IF NOT EXISTS applied_migrations (
+          identifier TEXT NOT NULL PRIMARY KEY
+        , ddl TEXT NOT NULL
+        , applied_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+      );
+      LOCK TABLE applied_migrations IN EXCLUSIVE MODE;
+      IF NOT EXISTS (SELECT 1 FROM applied_migrations m WHERE m.identifier = migration_name)
+      THEN
+        EXECUTE ddl;
+        INSERT INTO applied_migrations (identifier, ddl) VALUES (migration_name, ddl);
+        RETURN TRUE;
+      END IF;
+      RETURN FALSE;
+    END;
+    $$ LANGUAGE plpgsql;
   END IF;
-  RETURN FALSE;
-END;
-$$ LANGUAGE plpgsql;
+END
+$body$;
 
 --------------------------------------------------------------------------------
 -- Example migrations follow
