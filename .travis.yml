@@ -1,0 +1,10 @@
+services:
+  - postgresql
+
+script:
+  ./test.sh
+
+# Local Variables:
+# indent-tabs-mode: nil
+# coding: utf-8
+# End:

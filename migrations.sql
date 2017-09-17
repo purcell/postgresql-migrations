@@ -41,24 +41,24 @@ END
 $body$;
 
 --------------------------------------------------------------------------------
--- Example migrations follow
+-- Example migrations follow, commented out
 --------------------------------------------------------------------------------
 
--- Give each migration a unique name:
-SELECT apply_migration('create_things_table',
-$$
-  -- SQL to apply goes here
-  CREATE TABLE things (
-    name TEXT
-  );
-$$);
+-- -- Give each migration a unique name:
+-- SELECT apply_migration('create_things_table',
+-- $$
+--   -- SQL to apply goes here
+--   CREATE TABLE things (
+--     name TEXT
+--   );
+-- $$);
 
--- Add more migrations in the order you'd like them to be applied:
-SELECT apply_migration('alter_things_table',
-$$
-  -- You can place not just one statement...
-  ALTER TABLE things ADD number INTEGER;
-  -- ...but multiple in here.
-  ALTER TABLE things ALTER name SET NOT NULL;
-  -- All statements will be run in a transaction.
-$$);
+-- -- Add more migrations in the order you'd like them to be applied:
+-- SELECT apply_migration('alter_things_table',
+-- $$
+--   -- You can place not just one statement...
+--   ALTER TABLE things ADD number INTEGER;
+--   -- ...but multiple in here.
+--   ALTER TABLE things ALTER name SET NOT NULL;
+--   -- All statements will be run in a transaction.
+-- $$);
