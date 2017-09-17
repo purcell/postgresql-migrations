@@ -11,6 +11,8 @@
 -- the contained migrations would grant access to less-privileged
 -- application-level users as appropriate.
 
+-- Refer to https://github.com/purcell/postgresql-migrations for info and updates
+
 --------------------------------------------------------------------------------
 -- A function that will apply an individual migration
 --------------------------------------------------------------------------------
