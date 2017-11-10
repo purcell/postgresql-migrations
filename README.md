@@ -11,6 +11,9 @@ PostgreSQL database. It works by providing a PLPGSQL procedure which
 can execute a chunk of SQL and then note it as having been executed,
 so that it will not be executed again the next time.
 
+We're actively using this in production over at NEC Smart Cities with
+great success, so it is now somewhat proven and maintained.
+
 ### Installation
 
 Copy `migrations.sql` to your project. Add migrations to the end of
