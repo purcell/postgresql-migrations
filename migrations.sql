@@ -23,11 +23,13 @@ BEGIN
     CREATE FUNCTION apply_migration (migration_name TEXT, ddl TEXT) RETURNS BOOLEAN
       AS $$
     BEGIN
-      CREATE TABLE IF NOT EXISTS applied_migrations (
-          identifier TEXT NOT NULL PRIMARY KEY
-        , ddl TEXT NOT NULL
-        , applied_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
-      );
+      IF NOT EXISTS (SELECT FROM pg_catalog.pg_tables WHERE tablename = 'applied_migrations') THEN
+        CREATE TABLE applied_migrations (
+            identifier TEXT NOT NULL PRIMARY KEY
+          , ddl TEXT NOT NULL
+          , applied_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+        );
+      END IF;
       LOCK TABLE applied_migrations IN EXCLUSIVE MODE;
       IF NOT EXISTS (SELECT 1 FROM applied_migrations m WHERE m.identifier = migration_name)
       THEN
