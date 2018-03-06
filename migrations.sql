@@ -33,6 +33,7 @@ BEGIN
       LOCK TABLE applied_migrations IN EXCLUSIVE MODE;
       IF NOT EXISTS (SELECT 1 FROM applied_migrations m WHERE m.identifier = migration_name)
       THEN
+        RAISE NOTICE 'Applying migration: %', migration_name;
         EXECUTE ddl;
         INSERT INTO applied_migrations (identifier, ddl) VALUES (migration_name, ddl);
         RETURN TRUE;
