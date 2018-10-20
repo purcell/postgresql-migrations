@@ -39,3 +39,11 @@ This software was written by
 ### License and copyright
 
 MIT license.
+
+<hr>
+
+[Support this project and my other Open Source work](https://www.patreon.com/sanityinc)
+
+[sanityinc.com](http://www.sanityinc.com/)
+
+[@sanityinc](https://twitter.com/sanityinc)
