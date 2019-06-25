@@ -65,6 +65,24 @@ ASSERT (EXISTS (SELECT 1 FROM applied_migrations WHERE identifier = 'create_foo'
 ASSERT (EXISTS (SELECT FROM pg_catalog.pg_tables WHERE tablename = 'foo' AND schemaname = 'public'));
 EOF
 
+announce "Checking we can't reuse identifiers"
+cat <<'EOF' >> $test_file
+DO
+$body$
+BEGIN
+  PERFORM apply_migration('create_foo', $$
+    CREATE TABLE bar ();
+  $$);
+  RAISE EXCEPTION 'Migration should have failed';
+EXCEPTION
+  WHEN UNIQUE_VIOLATION THEN
+    RETURN;
+  RAISE;
+END
+$body$
+EOF
+run_migrations "$test_file"
+
 announce "Re-running to check idempotency"
 run_migrations "$test_file"
 assert <<'EOF'
