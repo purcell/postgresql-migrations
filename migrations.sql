@@ -20,7 +20,7 @@ DO
 $body$
 BEGIN
   IF NOT EXISTS (SELECT FROM pg_catalog.pg_proc WHERE proname = 'apply_migration') THEN
-    CREATE FUNCTION apply_migration (migration_name TEXT, ddl TEXT) RETURNS BOOLEAN
+    CREATE FUNCTION apply_migration (migration_name TEXT, migration_ddl TEXT) RETURNS BOOLEAN
       AS $$
     BEGIN
       IF NOT EXISTS (SELECT FROM pg_catalog.pg_tables WHERE tablename = 'applied_migrations') THEN
@@ -31,11 +31,11 @@ BEGIN
         );
       END IF;
       LOCK TABLE applied_migrations IN EXCLUSIVE MODE;
-      IF NOT EXISTS (SELECT 1 FROM applied_migrations m WHERE m.identifier = migration_name)
+      IF NOT EXISTS (SELECT 1 FROM applied_migrations m WHERE m.identifier = migration_name AND m.ddl = migration_ddl)
       THEN
-        RAISE NOTICE 'Applying migration: %', migration_name;
-        EXECUTE ddl;
-        INSERT INTO applied_migrations (identifier, ddl) VALUES (migration_name, ddl);
+        RAISE NOTICE 'Applying migration: % (%)', migration_name, md5(migration_ddl);
+        EXECUTE migration_ddl;
+        INSERT INTO applied_migrations (identifier, ddl) VALUES (migration_name, migration_ddl);
         RETURN TRUE;
       END IF;
       RETURN FALSE;
