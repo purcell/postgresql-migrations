@@ -79,7 +79,7 @@ EXCEPTION
     RETURN;
   RAISE;
 END
-$body$
+$body$;
 EOF
 run_migrations "$test_file"
 
