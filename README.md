@@ -42,8 +42,12 @@ MIT license.
 
 <hr>
 
-[Support this project and my other Open Source work](https://www.patreon.com/sanityinc)
+Author links:
 
-[sanityinc.com](http://www.sanityinc.com/)
+[💝 Support this project and my other Open Source work](https://www.patreon.com/sanityinc)
 
-[@sanityinc](https://twitter.com/sanityinc)
+[💼 LinkedIn profile](https://uk.linkedin.com/in/stevepurcell)
+
+[✍ sanityinc.com](http://www.sanityinc.com/)
+
+[🐦 @sanityinc](https://twitter.com/sanityinc)
